@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NetCenter • Smart Computer Booking</title>
+
+    <link rel="stylesheet" href="net.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     AUTH
+========================================================= -->
+
+<section id="authView" class="auth-view">
+
+    <div class="auth-layout">
+
+        <!-- LEFT SIDE -->
+
+        <div class="auth-intro">
+
+            <span class="eyebrow">
+                SMART NET CENTER PLATFORM
+            </span>
+
+            <h1>
+                Book the right computer,
+                at the right place,
+                at the right time.
+            </h1>
+
+            <p>
+                Customers discover nearby net centers and reserve
+                systems. Owners manage only their own centers,
+                systems, rates, repairs and queues.
+            </p>
+
+            <div class="intro-points">
+
+                <div>
+                    ✓ Multi-center discovery
+                </div>
+
+                <div>
+                    ✓ Time-slot booking & queues
+                </div>
+
+                <div>
+                    ✓ System repair status & billing
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- AUTH CARD -->
+
+        <div class="auth-card">
+
+            <div class="brand-lockup">
+
+                <div class="brand-mark">
+                    🖥️
+                </div>
+
+                <div>
+
+                    <strong>
+                        NetCenter
+                    </strong>
+
+                    <small>
+                        Smart Computer Booking
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- ROLE CHOICE -->
+
+            <div id="roleChooser">
+
+                <div class="auth-heading">
+
+                    <span>
+                        GET STARTED
+                    </span>
+
+                    <h2>
+                        Who are you?
+                    </h2>
+
+                    <p>
+                        Select your account type before continuing.
+                    </p>
+
+                </div>
+
+
+                <div class="role-grid">
+
+                    <button
+                        class="role-card"
+                        data-role="user">
+
+                        <span>
+                            👤
+                        </span>
+
+                        <b>
+                            Customer
+                        </b>
+
+                        <small>
+                            Find centers, book systems,
+                            join queues and view bills.
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        class="role-card"
+                        data-role="admin">
+
+                        <span>
+                            🏪
+                        </span>
+
+                        <b>
+                            Admin / Owner
+                        </b>
+
+                        <small>
+                            Manage your centers, systems,
+                            rates, repairs and bookings.
+                        </small>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOGIN / REGISTER AREA -->
+
+            <div
+                id="authFormArea"
+                class="hidden">
+
+                <button
+                    id="backRole"
+                    class="link-button">
+
+                    ← Change account type
+
+                </button>
+
+
+                <div class="selected-role">
+
+                    <span id="selectedRoleIcon">
+                        👤
+                    </span>
+
+                    <div>
+
+                        <small id="selectedRoleLabel">
+                            CUSTOMER
+                        </small>
+
+                        <strong id="selectedRoleTitle">
+                            Customer Login
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="auth-switch">
+
+                    <button
+                        id="showLogin"
+                        class="active">
+
+                        Login
+
+                    </button>
+
+                    <button
+                        id="showRegister">
+
+                        Register
+
+                    </button>
+
+                </div>
+
+
+                <!-- LOGIN -->
+
+                <form id="loginForm">
+
+                    <div class="field">
+
+                        <label>
+                            Email
+                        </label>
+
+                        <input
+                            id="loginEmail"
+                            type="email"
+                            required
+                            placeholder="you@example.com"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Password
+                        </label>
+
+                        <input
+                            id="loginPassword"
+                            type="password"
+                            required
+                            placeholder="Enter password"
+                        >
+
+                    </div>
+
+
+                    <button
+                        class="btn primary full"
+                        type="submit">
+
+                        Continue to Dashboard →
+
+                    </button>
+
+                </form>
+
+
+                <!-- REGISTER -->
+
+                <form
+                    id="registerForm"
+                    class="hidden">
+
+                    <div class="field">
+
+                        <label>
+                            Full Name
+                        </label>
+
+                        <input
+                            id="registerName"
+                            required
+                            placeholder="Your full name"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Email
+                        </label>
+
+                        <input
+                            id="registerEmail"
+                            type="email"
+                            required
+                            placeholder="you@example.com"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Password
+                        </label>
+
+                        <input
+                            id="registerPassword"
+                            type="password"
+                            minlength="6"
+                            required
+                            placeholder="Minimum 6 characters"
+                        >
+
+                    </div>
+
+
+                    <button
+                        class="btn primary full"
+                        type="submit">
+
+                        Create Account →
+
+                    </button>
+
+                </form>
+
+
+                <div class="demo-box">
+
+                    <b>
+                        Demo login
+                    </b>
+
+                    <span id="demoText">
+                        user@demo.com / user123
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="authMessage"
+                    class="notice hidden">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     MAIN APPLICATION
+========================================================= -->
+
+<section
+    id="appView"
+    class="app-view hidden">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-mark">
+                🖥️
+            </div>
+
+            <div>
+
+                <strong>
+                    NetCenter
+                </strong>
+
+                <small id="sidebarRole">
+                    Customer
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="sidebar-user">
+
+            <div
+                id="sidebarAvatar"
+                class="avatar">
+
+                U
+
+            </div>
+
+            <div>
+
+                <b id="sidebarName">
+                    User
+                </b>
+
+                <small id="sidebarEmail">
+                    user@example.com
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <nav
+            id="mainNav"
+            class="side-nav">
+        </nav>
+
+
+        <button
+            id="logoutBtn"
+            class="logout-side">
+
+            ↪ Sign out
+
+        </button>
+
+    </aside>
+
+
+
+    <!-- WORKSPACE -->
+
+    <main class="workspace">
+
+        <header class="topbar">
+
+            <div>
+
+                <span
+                    id="pageKicker"
+                    class="eyebrow">
+
+                    DASHBOARD
+
+                </span>
+
+                <h2 id="pageTitle">
+                    Overview
+                </h2>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <span
+                    id="liveClock">
+                </span>
+
+
+                <span
+                    id="selectedCenterChip"
+                    class="top-chip hidden">
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             USER OVERVIEW
+        ====================================================== -->
+
+        <section
+            id="user-overview"
+            class="page user-page hidden">
+
+            <div class="hero hero-user">
+
+                <div>
+
+                    <span class="eyebrow">
+                        CUSTOMER OVERVIEW
+                    </span>
+
+                    <h1 id="userWelcome">
+                        Good evening 👋
+                    </h1>
+
+                    <p>
+                        Your bookings, nearby centers,
+                        queue position and billing at a glance.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn light"
+                    data-go="user-centers">
+
+                    Find a Net Center →
+
+                </button>
+
+            </div>
+
+
+            <div class="stats-grid four">
+
+                <div class="metric">
+
+                    <span>
+                        Centers near you
+                    </span>
+
+                    <strong id="uStatCenters">
+                        0
+                    </strong>
+
+                    <small>
+                        Open centers
+                    </small>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <span>
+                        Available systems
+                    </span>
+
+                    <strong id="uStatAvailable">
+                        0
+                    </strong>
+
+                    <small>
+                        Across open centers
+                    </small>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <span>
+                        Occupied systems
+                    </span>
+
+                    <strong id="uStatOccupied">
+                        0
+                    </strong>
+
+                    <small>
+                        Right now
+                    </small>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <span>
+                        My queue
+                    </span>
+
+                    <strong id="uStatQueue">
+                        0
+                    </strong>
+
+                    <small>
+                        Waiting requests
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+                <button
+                    class="feature-card"
+                    data-go="user-centers">
+
+                    <span>
+                        🔎
+                    </span>
+
+                    <b>
+                        Find a Center
+                    </b>
+
+                    <small>
+                        Search by center,
+                        city or distance.
+                    </small>
+
+                </button>
+
+
+                <button
+                    class="feature-card"
+                    data-go="user-bookings">
+
+                    <span>
+                        📅
+                    </span>
+
+                    <b>
+                        My Bookings
+                    </b>
+
+                    <small>
+                        Track future and current sessions.
+                    </small>
+
+                </button>
+
+
+                <button
+                    class="feature-card"
+                    data-go="user-queue">
+
+                    <span>
+                        ⏳
+                    </span>
+
+                    <b>
+                        My Queue
+                    </b>
+
+                    <small>
+                        See position and next available time.
+                    </small>
+
+                </button>
+
+
+                <button
+                    class="feature-card"
+                    data-go="user-activity">
+
+                    <span>
+                        🧾
+                    </span>
+
+                    <b>
+                        Activity & Bills
+                    </b>
+
+                    <small>
+                        View completed sessions and bills.
+                    </small>
+
+                </button>
+
+            </div>
+
+
+            <div class="content-grid two">
+
+                <div class="card">
+
+                    <div class="section-head">
+
+                        <div>
+
+                            <h3>
+                                Next booking
+                            </h3>
+
+                            <p>
+                                Your most recent active or scheduled session.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="uNextBooking">
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="section-head">
+
+                        <div>
+
+                            <h3>
+                                Quick tips
+                            </h3>
+
+                            <p>
+                                How the booking flow works.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tip-list">
+
+                        <div>
+                            <b>1</b>
+                            <span>
+                                Choose a center and open its details.
+                            </span>
+                        </div>
+
+                        <div>
+                            <b>2</b>
+                            <span>
+                                Click <b>Book a Computer</b>
+                                to open booking options.
+                            </span>
+                        </div>
+
+                        <div>
+                            <b>3</b>
+                            <span>
+                                If no system fits your time,
+                                join the queue.
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             USER FIND CENTERS
+        ====================================================== -->
+
+        <section
+            id="user-centers"
+            class="page user-page hidden">
+
+            <div class="page-hero">
+
+                <div>
+
+                    <span class="eyebrow">
+                        DISCOVER
+                    </span>
+
+                    <h1>
+                        Find a Net Center
+                    </h1>
+
+                    <p>
+                        Search and compare centers.
+                        Use your location only here.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="useLocationBtn"
+                    class="btn secondary">
+
+                    📍 Use My Location
+
+                </button>
+
+            </div>
+
+
+            <div class="search-bar card">
+
+                <input
+                    id="centerSearch"
+                    placeholder="Search center, city or address..."
+                >
+
+
+                <select id="centerSort">
+
+                    <option value="nearest">
+                        Nearest
+                    </option>
+
+                    <option value="availability">
+                        Most available
+                    </option>
+
+                    <option value="rate">
+                        Lowest rate
+                    </option>
+
+                    <option value="name">
+                        Name
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                id="centerResults"
+                class="center-results">
+            </div>
+
+
+            <div
+                id="centerEmpty"
+                class="empty-state hidden">
+
+                <span>
+                    🏢
+                </span>
+
+                <h3>
+                    No matching centers
+                </h3>
+
+                <p>
+                    Try another search or ask an admin
+                    to add a center.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SELECTED USER CENTER
+        ====================================================== -->
+
+        <section
+            id="user-center-detail"
+            class="page user-page hidden">
+
+            <div id="selectedCenterDetail">
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             USER BOOKINGS
+        ====================================================== -->
+
+        <section
+            id="user-bookings"
+            class="page user-page hidden">
+
+            <div class="page-hero compact">
+
+                <div>
+
+                    <span class="eyebrow">
+                        MY SCHEDULE
+                    </span>
+
+                    <h1>
+                        My Bookings
+                    </h1>
+
+                    <p>
+                        Future, active and completed
+                        computer sessions.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn primary"
+                    data-go="user-centers">
+
+                    + New Booking
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="userBookingsList">
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             USER QUEUE
+        ====================================================== -->
+
+        <section
+            id="user-queue"
+            class="page user-page hidden">
+
+            <div class="page-hero compact">
+
+                <div>
+
+                    <span class="eyebrow">
+                        WAITING LINE
+                    </span>
+
+                    <h1>
+                        My Queue
+                    </h1>
+
+                    <p>
+                        See your queue position
+                        and expected system time.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="userQueueList">
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             USER ACTIVITY
+        ====================================================== -->
+
+        <section
+            id="user-activity"
+            class="page user-page hidden">
+
+            <div class="page-hero compact">
+
+                <div>
+
+                    <span class="eyebrow">
+                        HISTORY
+                    </span>
+
+                    <h1>
+                        Activity & Bills
+                    </h1>
+
+                    <p>
+                        Completed sessions,
+                        charges and generated bills.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats-grid three">
+
+                <div class="metric">
+
+                    <span>
+                        Completed sessions
+                    </span>
+
+                    <strong id="uCompleted">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <span>
+                        Generated bills
+                    </span>
+
+                    <strong id="uBills">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <span>
+                        Total spent
+                    </span>
+
+                    <strong id="uSpent">
+                        ₹0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="userActivityList">
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ADMIN OVERVIEW
+        ====================================================== -->
+
+        <section
+            id="admin-overview"
+            class="page admin-page hidden">
+
+            <div class="hero hero-admin">
+
+                <div>
+
+                    <span class="eyebrow">
+                        OWNER OVERVIEW
+                    </span>
+
+                    <h1 id="adminWelcome">
+                        Welcome back, Admin
+                    </h1>
+
+                    <p>
+                        Manage your centers, machines,
+                        rates and queue from one control space.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn light"
+                    data-go="admin-centers">
+
+                    Manage My Centers →
+
+                </button>
+
+            </div>
+
+
+            <div class="stats-grid four">
+
+                <div class="metric">
+
+                    <span>
+                        My centers
+                    </span>
+
+                    <strong id="aStatCenters">
+                        0
+                    </strong>
+
+                    <small>
+                        Owned by you
+                    </small>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <span>
+                        Total systems
+                    </span>
+
+                    <strong id="aStatSystems">
+                        0
+                    </strong>
+
+                    <small>
+                        Across your centers
+                    </small>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <span>
+                        Available
+                    </span>
+
+                    <strong id="aStatAvailable">
+                        0
+                    </strong>
+
+                    <small>
+                        Right now
+                    </small>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <span>
+                        Queue
+                    </span>
+
+                    <strong id="aStatQueue">
+                        0
+                    </strong>
+
+                    <small>
+                        Waiting customers
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="adminCenterSpotlight">
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ADMIN CENTERS
+        ====================================================== -->
+
+        <section
+            id="admin-centers"
+            class="page admin-page hidden">
+
+            <div class="page-hero">
+
+                <div>
+
+                    <span class="eyebrow">
+                        OWNERSHIP
+                    </span>
+
+                    <h1>
+                        My Centers
+                    </h1>
+
+                    <p>
+                        Select a center to manage.
+                        Only your owned centers appear here.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="addCenterBtn"
+                    class="btn primary">
+
+                    + Add Net Center
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="adminCenterList"
+                class="admin-center-list">
+            </div>
+
+
+            <div
+                id="adminNoCenters"
+                class="empty-state hidden">
+
+                <span>
+                    🏪
+                </span>
+
+                <h3>
+                    You do not own a net center yet
+                </h3>
+
+                <p>
+                    Create your first center to
+                    start managing systems.
+                </p>
+
+                <button
+                    class="btn primary"
+                    id="addCenterBtnEmpty">
+
+                    Create Net Center
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ADMIN CENTER WORKSPACE
+        ====================================================== -->
+
+        <section
+            id="admin-workspace"
+            class="page admin-page hidden">
+
+            <div
+                id="adminSelectedCenterHeader">
+            </div>
+
+
+            <div
+                id="adminCenterActions"
+                class="admin-action-grid">
+
+                <button
+                    class="action-tile"
+                    id="editCenterBtn">
+
+                    <span>
+                        ✏️
+                    </span>
+
+                    <b>
+                        Change Center Details
+                    </b>
+
+                    <small>
+                        Edit name, contact, location,
+                        hours and rate.
+                    </small>
+
+                </button>
+
+
+                <button
+                    class="action-tile"
+                    data-go="admin-systems">
+
+                    <span>
+                        💻
+                    </span>
+
+                    <b>
+                        Manage Systems
+                    </b>
+
+                    <small>
+                        Add, inspect, disable
+                        or enable computers.
+                    </small>
+
+                </button>
+
+
+                <button
+                    class="action-tile"
+                    data-go="admin-operations">
+
+                    <span>
+                        📋
+                    </span>
+
+                    <b>
+                        Operations
+                    </b>
+
+                    <small>
+                        View live bookings
+                        and waiting queue.
+                    </small>
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="centerEditPanel"
+                class="card hidden">
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ADMIN SYSTEMS
+        ====================================================== -->
+
+        <section
+            id="admin-systems"
+            class="page admin-page hidden">
+
+            <div
+                id="adminSystemsHeader">
+            </div>
+
+
+            <div class="systems-toolbar card">
+
+                <div>
+
+                    <b>
+                        Computer systems
+                    </b>
+
+                    <small>
+                        Click a system to inspect it.
+                    </small>
+
+                </div>
+
+
+                <div class="toolbar-actions">
+
+                    <button
+                        id="addSystemBtn"
+                        class="btn primary">
+
+                        + Add System
+
+                    </button>
+
+
+                    <button
+                        id="removeSystemBtn"
+                        class="btn secondary">
+
+                        − Remove Last
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="adminSystemsGrid"
+                class="admin-systems-grid">
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ADMIN OPERATIONS
+        ====================================================== -->
+
+        <section
+            id="admin-operations"
+            class="page admin-page hidden">
+
+            <div
+                id="adminOperationsHeader">
+            </div>
+
+
+            <div class="ops-grid">
+
+                <div class="card">
+
+                    <div class="section-head">
+
+                        <div>
+
+                            <h3>
+                                Current & Future Bookings
+                            </h3>
+
+                            <p>
+                                Only this selected center.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="adminBookingsTable">
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="section-head">
+
+                        <div>
+
+                            <h3>
+                                Waiting Queue
+                            </h3>
+
+                            <p>
+                                First-in-line requests.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="adminQueueTable">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</section>
+
+
+
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div
+    id="modal"
+    class="modal-root hidden">
+
+    <div
+        id="modalPanel"
+        class="modal-panel">
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    id="toast"
+    class="toast hidden">
+</div>
+
+
+<script src="net.js"></script>
+
+</body>
+</html>
