@@ -6,10 +6,10 @@
 ========================================================= */
 
 const DB_KEY =
-    "netcenter_redesign_db_v3";
+    "slotsync_db_v4";
 
 const SESSION_KEY =
-    "netcenter_redesign_session_v3";
+    "slotsync_session_v4";
 
 
 let db = loadDB();
@@ -273,172 +273,29 @@ function systems(count){
 ========================================================= */
 
 function seed(){
-
-    const admin1 =
-        id("u");
-
-    const admin2 =
-        id("u");
-
-    const user =
-        id("u");
-
-
-    const center1 =
-        id("c");
-
-    const center2 =
-        id("c");
-
-    const center3 =
-        id("c");
-
-
-    return {
-
-        users:[
-
-            {
-                id:admin1,
-                name:"Demo Admin",
-                email:"admin@netcenter.com",
-                password:"admin123",
-                role:"admin"
-            },
-
-            {
-                id:admin2,
-                name:"Second Admin",
-                email:"owner@netcenter.com",
-                password:"owner123",
-                role:"admin"
-            },
-
-            {
-                id:user,
-                name:"Demo User",
-                email:"user@demo.com",
-                password:"user123",
-                role:"user"
-            }
-
-        ],
-
-
-        centers:[
-
-            {
-                id:center1,
-                ownerId:admin1,
-                name:"Rajahmundry Digital Hub",
-                phone:"9876543210",
-                email:"hub@example.com",
-                address:"Main Road, Near Central Market",
-                city:"Rajahmundry",
-                pin:"533101",
-                hours:"8:00 AM - 10:00 PM",
-                rate:20,
-                status:"open",
-                lat:16.9891,
-                lng:81.7799,
-                systems:systems(10)
-            },
-
-
-            {
-                id:center2,
-                ownerId:admin2,
-                name:"Student Net Cafe",
-                phone:"9876501234",
-                email:"student@example.com",
-                address:"College Road, Near Bus Stand",
-                city:"Rajahmundry",
-                pin:"533105",
-                hours:"7:00 AM - 11:00 PM",
-                rate:25,
-                status:"open",
-                lat:16.9997,
-                lng:81.804,
-                systems:systems(15)
-            },
-
-
-            {
-                id:center3,
-                ownerId:admin1,
-                name:"Quick Browse Point",
-                phone:"9000001111",
-                email:"",
-                address:"Market Street",
-                city:"Rajahmundry",
-                pin:"533102",
-                hours:"9:00 AM - 9:00 PM",
-                rate:18,
-                status:"open",
-                lat:17.0024,
-                lng:81.7765,
-                systems:systems(8)
-            }
-
-        ],
-
-
-        bookings:[],
-
-        queue:[],
-
-        bills:[]
-
-    };
-
+    return { users: [], centers: [], bookings: [], queue: [], bills: [] };
 }
-
-
 
 function loadDB(){
-
-    try{
-
-        const stored =
-            localStorage.getItem(
-                DB_KEY
-            );
-
-
-        if(stored){
-
-            return JSON.parse(
-                stored
-            );
-
+    try {
+        const stored = localStorage.getItem(DB_KEY);
+        if (stored) {
+            const data = JSON.parse(stored);
+            return {
+                users: Array.isArray(data.users) ? data.users : [],
+                centers: Array.isArray(data.centers) ? data.centers : [],
+                bookings: Array.isArray(data.bookings) ? data.bookings : [],
+                queue: Array.isArray(data.queue) ? data.queue : [],
+                bills: Array.isArray(data.bills) ? data.bills : []
+            };
         }
-
+    } catch (error) {
+        console.error("Database loading error:", error);
     }
-
-    catch(error){
-
-        console.log(
-            "Database loading error:",
-            error
-        );
-
-    }
-
-
-    const data =
-        seed();
-
-
-    localStorage.setItem(
-        DB_KEY,
-        JSON.stringify(data)
-    );
-
-
+    const data = seed();
+    localStorage.setItem(DB_KEY, JSON.stringify(data));
     return data;
-
 }
-
 
 
 /* =========================================================
@@ -1337,19 +1194,7 @@ function selectRole(role){
         role === "admin"
             ? "Admin Login"
             : "Customer Login";
-
-
-    document
-        .getElementById(
-            "demoText"
-        )
-        .textContent =
-        role === "admin"
-            ? "admin@netcenter.com / admin123"
-            : "user@demo.com / user123";
-
-
-    document
+document
         .getElementById(
             "authMessage"
         )
@@ -1357,6 +1202,25 @@ function selectRole(role){
             "hidden"
         );
 
+
+
+    const hasAccounts = db.users.length > 0;
+    document.getElementById("showLogin").classList.toggle("hidden", !hasAccounts);
+    document.getElementById("showRegister").classList.toggle("hidden", false);
+    if (!hasAccounts) {
+        document.getElementById("showRegister").classList.add("active");
+        document.getElementById("showLogin").classList.remove("active");
+        document.getElementById("registerForm").classList.remove("hidden");
+        document.getElementById("loginForm").classList.add("hidden");
+        document.getElementById("selectedRoleTitle").textContent =
+            role === "admin" ? "Create Admin Account" : "Create Customer Account";
+    } else {
+        document.getElementById("showLogin").classList.remove("hidden");
+        document.getElementById("showLogin").classList.add("active");
+        document.getElementById("showRegister").classList.remove("active");
+        document.getElementById("loginForm").classList.remove("hidden");
+        document.getElementById("registerForm").classList.add("hidden");
+    }
 }
 
 
@@ -1365,6 +1229,10 @@ function login(
     email,
     password
 ){
+    if (!db.users.length) {
+        authMessage("Create your first account before logging in.", "error");
+        return;
+    }
 
     const user =
         db.users.find(
@@ -1904,7 +1772,7 @@ function renderUserCenters(){
 
     pageTitle(
         "DISCOVER",
-        "Find a Net Center"
+        "Find a computer hub"
     );
 
 
@@ -2090,6 +1958,10 @@ function renderUserCenters(){
                             ·
                             ${esc(center.address)}
                         </div>
+                        <a class="map-link" target="_blank" rel="noopener noreferrer"
+                           href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(center.lat + "," + center.lng)}">
+                           📍 Navigate to this hub
+                        </a>
 
                     </div>
 
@@ -3260,10 +3132,35 @@ function submitBooking(){
     }
 
 
-    go(
-        "user-bookings"
-    );
-
+    const queued = !suitable;
+    const reference = queued ? db.queue[db.queue.length - 1].id : db.bookings[db.bookings.length - 1].id;
+    document.getElementById("modalPanel").innerHTML = `
+        <div class="booking-success-head">
+            <div class="success-icon">${queued ? "⏳" : "✓"}</div>
+            <span class="eyebrow">${queued ? "QUEUE CONFIRMED" : "BOOKING CONFIRMED"}</span>
+            <h2>${queued ? "You have joined the queue!" : "Booking successful!"}</h2>
+            <p>${queued ? "Your request has been saved. Check My Queue for updates." : "Your computer is reserved. Your booking details are below."}</p>
+        </div>
+        <div class="bill booking-receipt">
+            <div class="bill-row"><span>Reference</span><b>${esc(reference)}</b></div>
+            <div class="bill-row"><span>Computer Hub</span><b>${esc(center.name)}</b></div>
+            <div class="bill-row"><span>System / Status</span><b>${esc(suitable ? suitable.name : "Queue request")}</b></div>
+            <div class="bill-row"><span>Start time</span><b>${esc(dt(start))}</b></div>
+            <div class="bill-row"><span>Duration</span><b>${esc(dur(minutes))}</b></div>
+            <div class="bill-row"><span>Rate</span><b>${money(center.rate)}/hour</b></div>
+            <div class="bill-total"><span>Estimated ${queued ? "charge if allocated" : "total"}</span><strong>${money(charge(minutes, center.rate))}</strong></div>
+            <p class="muted receipt-note">This is a booking confirmation and estimate, not the final usage bill. The final bill is available after the session ends.</p>
+        </div>
+        <div class="modal-actions">
+            <button class="btn ghost" id="printBookingReceipt">Print / Save Receipt</button>
+            <button class="btn primary" id="bookingDone">View My ${queued ? "Queue" : "Bookings"}</button>
+        </div>`;
+    openModal();
+    document.getElementById("printBookingReceipt").onclick = () => window.print();
+    document.getElementById("bookingDone").onclick = () => {
+        closeModal();
+        go(queued ? "user-queue" : "user-bookings");
+    };
 }
 
 
@@ -4132,7 +4029,7 @@ function renderAdminOverview(){
                 </h3>
 
                 <p>
-                    Create a net center from My Centers.
+                    Create a computer hub from My Centers.
                 </p>
 
                 <button
@@ -5836,6 +5733,8 @@ function addSystem(){
     }
 
 
+    if (!window.confirm("Add a new computer system to this hub?")) return;
+
     center.systems.push({
 
         id:
@@ -5877,81 +5776,70 @@ function addSystem(){
 
 
 function removeSystem(){
-
-    const center =
-        getCenter(
-            selectedAdminCenterId
-        );
-
-
-    if(
-        !center ||
-        center.systems.length <= 1
-    ){
-
-        showToast(
-            "A center must keep at least one system.",
-            "warn"
-        );
-
+    const center = getCenter(selectedAdminCenterId);
+    if (!center) {
+        showToast("Select a computer hub first.", "error");
         return;
-
+    }
+    if (center.systems.length <= 1) {
+        showToast("A computer hub must keep at least one system.", "warn");
+        return;
+    }
+    const removable = center.systems.filter(system =>
+        !activeBookings().some(booking =>
+            booking.centerId === center.id && booking.systemId === system.id
+        )
+    );
+    if (!removable.length) {
+        showToast("Every system has an active or future booking.", "warn");
+        return;
     }
 
+    document.getElementById("modalPanel").innerHTML = `
+        <div class="modal-head">
+            <div><span class="eyebrow">REMOVE SYSTEM</span><h3>Choose a system to remove</h3></div>
+            <button class="close" data-close aria-label="Close">×</button>
+        </div>
+        <p class="modal-help">Booked systems are not listed. Select the exact system you want to remove.</p>
+        <div class="field">
+            <label for="removeSystemSelect">Computer system</label>
+            <select id="removeSystemSelect">
+                ${removable.map(system => `<option value="${esc(system.id)}">${esc(system.name)}</option>`).join("")}
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button class="btn ghost" data-close>Cancel</button>
+            <button class="btn danger" id="confirmRemoveSystem">Remove Selected System</button>
+        </div>`;
+    openModal();
 
-    const removable =
-        [...center.systems]
-            .reverse()
-            .find(
-                system =>
-
-                    !activeBookings().some(
-                        booking =>
-
-                            booking.centerId ===
-                                center.id &&
-
-                            booking.systemId ===
-                                system.id
-                    )
-            );
-
-
-    if(!removable){
-
-        showToast(
-            "No removable system. A booked system cannot be removed.",
-            "warn"
-        );
-
-        return;
-
-    }
-
-
-    center.systems =
-        center.systems.filter(
-            system =>
-                system.id !==
-                removable.id
-        );
-
-
-    save();
-
-
-    showToast(
-        `${removable.name} removed.`,
-        "success"
-    );
-
-
-    go(
-        "admin-systems"
-    );
-
+    document.getElementById("confirmRemoveSystem").onclick = () => {
+        const systemId = document.getElementById("removeSystemSelect").value;
+        const system = center.systems.find(item => item.id === systemId);
+        if (!system) {
+            showToast("Please select a valid system.", "error");
+            return;
+        }
+        if (center.systems.length <= 1) {
+            showToast("A computer hub must keep at least one system.", "warn");
+            closeModal();
+            return;
+        }
+        if (activeBookings().some(booking =>
+            booking.centerId === center.id && booking.systemId === system.id
+        )) {
+            showToast("This system has a booking and cannot be removed.", "warn");
+            closeModal();
+            return;
+        }
+        if (!window.confirm(`Are you sure you want to remove "${system.name}"? This action cannot be undone.`)) return;
+        center.systems = center.systems.filter(item => item.id !== system.id);
+        save();
+        closeModal();
+        showToast(`${system.name} removed successfully.`, "success");
+        go("admin-systems");
+    };
 }
-
 
 
 /* =========================================================
@@ -6472,7 +6360,7 @@ function generateBill(
             </h3>
 
             <p>
-                NetCenter computer usage bill
+                SlotSync computer usage bill
             </p>
 
 
@@ -6643,7 +6531,7 @@ function printBill(){
         <head>
 
             <title>
-                NetCenter Bill
+                SlotSync Bill
             </title>
 
             <style>
@@ -6761,7 +6649,7 @@ function openAddCenter(){
                 </span>
 
                 <h3>
-                    Add Net Center
+                    Add computer hub
                 </h3>
 
             </div>
@@ -6975,14 +6863,22 @@ function openAddCenter(){
                 );
 
 
+            const cityValue = document.getElementById("nCity").value.trim();
+            const addressValue = document.getElementById("nAddress").value.trim();
+            const latValue = document.getElementById("nLat").value.trim();
+            const lngValue = document.getElementById("nLng").value.trim();
+            const latNumber = Number(latValue);
+            const lngNumber = Number(lngValue);
+
             if(
-                !name ||
-                !rate ||
-                count < 1
+                !name || !rate || count < 1 || !cityValue || !addressValue ||
+                latValue === "" || lngValue === "" ||
+                !Number.isFinite(latNumber) || !Number.isFinite(lngNumber) ||
+                latNumber < -90 || latNumber > 90 || lngNumber < -180 || lngNumber > 180
             ){
 
                 showToast(
-                    "Enter the required center details.",
+                    "Enter the name, rate, system count, city, address, and valid latitude/longitude.",
                     "error"
                 );
 
@@ -7017,21 +6913,9 @@ function openAddCenter(){
                         .value
                         .trim(),
 
-                city:
-                    document
-                        .getElementById(
-                            "nCity"
-                        )
-                        .value
-                        .trim(),
+                city: cityValue,
 
-                address:
-                    document
-                        .getElementById(
-                            "nAddress"
-                        )
-                        .value
-                        .trim(),
+                address: addressValue,
 
                 pin:
                     document
@@ -7054,29 +6938,16 @@ function openAddCenter(){
                 status:
                     "open",
 
-                lat:
-                    Number(
-                        document
-                            .getElementById(
-                                "nLat"
-                            )
-                            .value
-                    ) || null,
-
-                lng:
-                    Number(
-                        document
-                            .getElementById(
-                                "nLng"
-                            )
-                            .value
-                    ) || null,
+                lat: latNumber,
+                lng: lngNumber,
 
                 systems:
                     systems(count)
 
             };
 
+
+            if (!window.confirm(`Create the computer hub "${center.name}" with ${count} systems at the selected location?`)) return;
 
             db.centers.push(
                 center
@@ -7094,7 +6965,7 @@ function openAddCenter(){
 
 
             showToast(
-                "Net center created.",
+                "Computer hub created successfully.",
                 "success"
             );
 
